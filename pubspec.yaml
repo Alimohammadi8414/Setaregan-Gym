@@ -1,0 +1,57 @@
+name: setareggan
+description: "A new Flutter project."
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_svg: 
+  shared_preferences: 
+  persian_datetime_picker: 
+  dio: 
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+
+  uses-material-design: true
+
+
+  assets:
+    - assets/icons/
+  #   - images/a_dot_ham.jpeg
+
+ 
+
+  
+  fonts:
+    - family: YekanBakh
+      fonts:
+        - asset: assets/fonts/yekan_bakh_black.ttf
+          weight: 900
+        - asset: assets/fonts/yekan_bakh_bold.ttf
+          weight: 700
+        - asset: assets/fonts/yekan_bakh_medium.ttf
+          weight: 500
+        - asset: assets/fonts/yekan_bakh_regular.ttf
+          weight: 400
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+
