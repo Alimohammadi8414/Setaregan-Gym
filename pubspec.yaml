@@ -11,12 +11,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+    
+  flutter_localization: ^0.3.3
   cupertino_icons: ^1.0.8
   flutter_svg: 
   shared_preferences: 
   persian_datetime_picker: 
   dio: 
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
