@@ -9,7 +9,6 @@ import 'package:setareggan/models/user.dart';
 import 'package:setareggan/services/user.dart';
 import 'package:setareggan/theme.dart';
 
-
 class AddEditScreen extends StatefulWidget {
   AddEditScreen({required this.user, super.key});
   User user;
@@ -23,10 +22,16 @@ class _AddEditScreenState extends State<AddEditScreen> {
   Jalali? endDate;
 
   final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController fatherNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController registerDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
+  final TextEditingController idNumberController = TextEditingController();
+  final TextEditingController palceOfIssueController = TextEditingController();
+  final TextEditingController dateOfBirthController = TextEditingController();
+  final TextEditingController educationController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
 
   ValueNotifier<int> registerType = ValueNotifier(1);
   final formKey = GlobalKey<FormState>();
@@ -77,8 +82,10 @@ class _AddEditScreenState extends State<AddEditScreen> {
                       ),
                     ),
                     const SizedBox(width: 12.0),
-                    Text("ثبت نام هنرجو ",
-                        style: Theme.of(context).textTheme.bodyLarge),
+                    Text(
+                      "ثبت نام هنرجو ",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 24.0),
@@ -91,15 +98,111 @@ class _AddEditScreenState extends State<AddEditScreen> {
                   },
                   controller: fullNameController,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    hintText: "نام و نام خانوادگی",
-                  ),
+                  decoration: InputDecoration(hintText: "نام و نام خانوادگی"),
                 ),
                 const SizedBox(height: 18.0),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return "لطفا شماره تلفن را وارد کنید";
+                      return "لطفا نام پدر را وارد کنید";
+                    }
+                    return null;
+                  },
+                  controller: fatherNameController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(hintText: "نام پدر"),
+                ),
+                const SizedBox(height: 18.0),
+                TextFormField(
+                  controller: idNumberController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(hintText: 'کدملی/کد اختصاصی '),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'کد ملی/کد اختصاصی را وارد کنید';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 18.0),
+                TextFormField(
+                  controller: palceOfIssueController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'محل صدور را وارد کنید';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(hintText: 'محل صدور'),
+                ),
+                SizedBox(height: 18),
+                TextFormField(
+                  controller: dateOfBirthController,
+                  readOnly: true,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'تاریخ تولد را وارد کنید';
+                    }
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'تاریخ تولد',
+                    suffixIcon: Container(
+                      padding: const EdgeInsets.all(12.0),
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: GestureDetector(
+                        onTap: () async {
+                          var birthdate = await showPersianDatePicker(
+                            context: context,
+                            firstDate: Jalali(1300),
+                            lastDate: Jalali(1425),
+                            initialDate: Jalali.now(),
+                            initialDatePickerMode: PersianDatePickerMode.day,
+                            initialEntryMode:
+                                PersianDatePickerEntryMode.calendar,
+                          );
+                          dateOfBirthController.text =
+                              birthdate?.formatCompactDate() ??
+                              "تاریخ تولد به درستی وارد نشده است";
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: SvgPicture.asset(
+                          'assets/icons/calendar.svg',
+                          colorFilter: const ColorFilter.mode(
+                            CustomColors.kLightGreyColor,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 18.0),
+                TextFormField(
+                  controller: educationController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'میزان تحصیلات را وارد کنید';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(hintText: 'تحصیلات'),
+                ),
+                SizedBox(height: 18.0),
+                TextFormField(
+                  controller: addressController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'آدرس محل سکونت را وارد کنید';
+                    }
+                  },
+                  decoration: InputDecoration(hintText: 'آدرس محل سکونت'),
+                ),
+                SizedBox(height: 18.0),
+                TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "لطفا شماره تلفن همراه را وارد کنید";
                     } else if (!value.startsWith('09')) {
                       return 'شماره تلفن باید با "09" شروع شود';
                     }
