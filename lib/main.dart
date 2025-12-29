@@ -3,6 +3,7 @@ import 'package:setareggan/screens/Root/root.dart';
 import 'package:setareggan/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 late SharedPreferences sharedPreferences;
 ValueNotifier<bool> isThemeDark = ValueNotifier(false);
@@ -29,9 +30,11 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: lightTheme(),
           darkTheme: darkTheme(),
-          locale: const Locale('fa'),
-          supportedLocales: [Locale('fa')],
-          localizationsDelegates: [
+          locale: const Locale('fa', 'IR'),
+          supportedLocales: const [Locale('fa', 'IR'), Locale('en', 'US')],
+          localizationsDelegates: const [
+            PersianMaterialLocalizations.delegate,
+            PersianCupertinoLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

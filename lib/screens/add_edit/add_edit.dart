@@ -144,6 +144,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                     if (value!.isEmpty) {
                       return 'تاریخ تولد را وارد کنید';
                     }
+                    return null;
                   },
                   decoration: InputDecoration(
                     hintText: 'تاریخ تولد',
@@ -160,6 +161,10 @@ class _AddEditScreenState extends State<AddEditScreen> {
                             initialDatePickerMode: PersianDatePickerMode.day,
                             initialEntryMode:
                                 PersianDatePickerEntryMode.calendar,
+                            holidayConfig: PersianHolidayConfig(
+                              weekendDays: {7},
+                            ),
+                            fieldHintText: 'روز/ماه/سال',
                           );
                           dateOfBirthController.text =
                               birthdate?.formatCompactDate() ??
@@ -195,6 +200,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                     if (value!.isEmpty) {
                       return 'آدرس محل سکونت را وارد کنید';
                     }
+                    return null;
                   },
                   decoration: InputDecoration(hintText: 'آدرس محل سکونت'),
                 ),
@@ -251,19 +257,27 @@ class _AddEditScreenState extends State<AddEditScreen> {
                             initialDate: Jalali.now(),
                             firstDate: Jalali(1380, 1),
                             lastDate: Jalali(1420, 1),
+                            holidayConfig: PersianHolidayConfig(
+                              weekendDays: {7},
+                            ),
+                            initialDatePickerMode: PersianDatePickerMode.day,
+                            initialEntryMode:
+                                PersianDatePickerEntryMode.calendar,
+                            fieldHintText: 'روز/ماه/سال',
                           );
                           registerDateController.text =
-                              registerDate?.formatCompactDate() ?? '';
+                              registerDate?.formatCompactDate() ??
+                              'تاریخ به درستی وارد نشده است';
 
                           switch (registerType.value) {
                             case 1:
-                              endDate = registerDate?.addDays(15);
-                              break;
-                            case 2:
                               endDate = registerDate?.addMonths(1);
                               break;
+                            case 2:
+                              endDate = registerDate!.addMonths(3);
+                              break;
                             case 3:
-                              endDate = registerDate?.addMonths(3);
+                              endDate = registerDate?.addMonths(6);
                               break;
                             default:
                           }
@@ -300,13 +314,38 @@ class _AddEditScreenState extends State<AddEditScreen> {
                               groupValue: registerType.value,
                               onChanged: (value) {
                                 registerType.value = 1;
-                                endDate = registerDate?.addDays(15);
-                                endDateController.text =
-                                    endDate?.formatCompactDate() ?? '';
+                                if (registerDate != null) {
+                                  final d = registerDate!;
+
+                                  int newMonth = d.month + 1;
+                                  int newYear = d.year;
+
+                                  if (newMonth > 12) {
+                                    newMonth -= 12;
+                                    newYear += 1;
+                                  }
+
+                                  final targetMonthLength = Jalali(
+                                    newYear,
+                                    newMonth,
+                                  ).monthLength;
+
+                                  final isEndOfMonth = d.monthLength == d.day;
+
+                                  final int newDay = isEndOfMonth
+                                      ? targetMonthLength
+                                      : (d.day <= targetMonthLength
+                                            ? d.day
+                                            : targetMonthLength);
+
+                                  endDate = Jalali(newYear, newMonth, newDay);
+                                  endDateController.text = endDate!
+                                      .formatCompactDate();
+                                }
                               },
                             ),
                             Text(
-                              "۱۵ روز",
+                              "1 ماه ",
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -321,13 +360,39 @@ class _AddEditScreenState extends State<AddEditScreen> {
                               groupValue: registerType.value,
                               onChanged: (value) {
                                 registerType.value = 2;
-                                endDate = registerDate?.addMonths(1);
-                                endDateController.text =
-                                    endDate?.formatCompactDate() ?? '';
+
+                                if (registerDate != null) {
+                                  final d = registerDate!;
+
+                                  int newMonth = d.month + 3;
+                                  int newYear = d.year;
+
+                                  if (newMonth > 12) {
+                                    newMonth -= 12;
+                                    newYear += 1;
+                                  }
+
+                                  final targetMonthLength = Jalali(
+                                    newYear,
+                                    newMonth,
+                                  ).monthLength;
+
+                                  final isEndOfMonth = d.monthLength == d.day;
+
+                                  final int newDay = isEndOfMonth
+                                      ? targetMonthLength
+                                      : (d.day <= targetMonthLength
+                                            ? d.day
+                                            : targetMonthLength);
+
+                                  endDate = Jalali(newYear, newMonth, newDay);
+                                  endDateController.text = endDate!
+                                      .formatCompactDate();
+                                }
                               },
                             ),
                             Text(
-                              "۱ ماه",
+                              "3 ماه ",
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -342,13 +407,38 @@ class _AddEditScreenState extends State<AddEditScreen> {
                               groupValue: registerType.value,
                               onChanged: (value) {
                                 registerType.value = 3;
-                                endDate = registerDate?.addMonths(3);
-                                endDateController.text =
-                                    endDate?.formatCompactDate() ?? '';
+                                if (registerDate != null) {
+                                  final d = registerDate!;
+
+                                  int newMonth = d.month + 6;
+                                  int newYear = d.year;
+
+                                  if (newMonth > 12) {
+                                    newMonth -= 12;
+                                    newYear += 1;
+                                  }
+
+                                  final targetMonthLength = Jalali(
+                                    newYear,
+                                    newMonth,
+                                  ).monthLength;
+
+                                  final isEndOfMonth = d.monthLength == d.day;
+
+                                  final int newDay = isEndOfMonth
+                                      ? targetMonthLength
+                                      : (d.day <= targetMonthLength
+                                            ? d.day
+                                            : targetMonthLength);
+
+                                  endDate = Jalali(newYear, newMonth, newDay);
+                                  endDateController.text = endDate!
+                                      .formatCompactDate();
+                                }
                               },
                             ),
                             Text(
-                              "۳ ماه",
+                              "6 ماه",
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -379,9 +469,17 @@ class _AddEditScreenState extends State<AddEditScreen> {
                             initialDate: Jalali.now(),
                             firstDate: Jalali(1380, 1),
                             lastDate: Jalali(1420, 1),
+                            holidayConfig: PersianHolidayConfig(
+                              weekendDays: {7},
+                            ),
+                            initialDatePickerMode: PersianDatePickerMode.day,
+                            initialEntryMode:
+                                PersianDatePickerEntryMode.calendar,
+                            fieldHintText: 'روز/ماه/سال',
                           );
                           endDateController.text =
-                              endDate?.formatCompactDate() ?? '';
+                              endDate?.formatCompactDate() ??
+                              'تاریخ به درستی وارد نشده است';
                         },
                         behavior: HitTestBehavior.opaque,
                         child: SvgPicture.asset(

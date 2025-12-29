@@ -16,7 +16,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_svg: 
   shared_preferences: 
-  persian_datetime_picker: 
+  persian_datetime_picker: ^3.2.0
   dio: 
   flutter_localizations:
     sdk: flutter
