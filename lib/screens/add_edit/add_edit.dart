@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:setareggan/models/user.dart';
+import 'package:setareggan/screens/utils/end_date_calculator.dart';
 import 'package:setareggan/services/user.dart';
 import 'package:setareggan/theme.dart';
 
@@ -271,13 +272,13 @@ class _AddEditScreenState extends State<AddEditScreen> {
 
                           switch (registerType.value) {
                             case 1:
-                              endDate = registerDate?.addMonths(1);
+                              endDate = endDateCalculator(registerDate!, 1);
                               break;
                             case 2:
-                              endDate = registerDate!.addMonths(3);
+                              endDate = endDateCalculator(registerDate!, 3);
                               break;
                             case 3:
-                              endDate = registerDate?.addMonths(6);
+                              endDate = endDateCalculator(registerDate!, 6);
                               break;
                             default:
                           }
@@ -314,34 +315,10 @@ class _AddEditScreenState extends State<AddEditScreen> {
                               groupValue: registerType.value,
                               onChanged: (value) {
                                 registerType.value = 1;
-                                if (registerDate != null) {
-                                  final d = registerDate!;
 
-                                  int newMonth = d.month + 1;
-                                  int newYear = d.year;
-
-                                  if (newMonth > 12) {
-                                    newMonth -= 12;
-                                    newYear += 1;
-                                  }
-
-                                  final targetMonthLength = Jalali(
-                                    newYear,
-                                    newMonth,
-                                  ).monthLength;
-
-                                  final isEndOfMonth = d.monthLength == d.day;
-
-                                  final int newDay = isEndOfMonth
-                                      ? targetMonthLength
-                                      : (d.day <= targetMonthLength
-                                            ? d.day
-                                            : targetMonthLength);
-
-                                  endDate = Jalali(newYear, newMonth, newDay);
-                                  endDateController.text = endDate!
-                                      .formatCompactDate();
-                                }
+                                endDate = endDateCalculator(registerDate!, 1);
+                                endDateController.text = endDate!
+                                    .formatCompactDate();
                               },
                             ),
                             Text(
@@ -361,34 +338,9 @@ class _AddEditScreenState extends State<AddEditScreen> {
                               onChanged: (value) {
                                 registerType.value = 2;
 
-                                if (registerDate != null) {
-                                  final d = registerDate!;
-
-                                  int newMonth = d.month + 3;
-                                  int newYear = d.year;
-
-                                  if (newMonth > 12) {
-                                    newMonth -= 12;
-                                    newYear += 1;
-                                  }
-
-                                  final targetMonthLength = Jalali(
-                                    newYear,
-                                    newMonth,
-                                  ).monthLength;
-
-                                  final isEndOfMonth = d.monthLength == d.day;
-
-                                  final int newDay = isEndOfMonth
-                                      ? targetMonthLength
-                                      : (d.day <= targetMonthLength
-                                            ? d.day
-                                            : targetMonthLength);
-
-                                  endDate = Jalali(newYear, newMonth, newDay);
-                                  endDateController.text = endDate!
-                                      .formatCompactDate();
-                                }
+                                endDate = endDateCalculator(registerDate!, 3);
+                                endDateController.text = endDate!
+                                    .formatCompactDate();
                               },
                             ),
                             Text(
@@ -407,34 +359,10 @@ class _AddEditScreenState extends State<AddEditScreen> {
                               groupValue: registerType.value,
                               onChanged: (value) {
                                 registerType.value = 3;
-                                if (registerDate != null) {
-                                  final d = registerDate!;
 
-                                  int newMonth = d.month + 6;
-                                  int newYear = d.year;
-
-                                  if (newMonth > 12) {
-                                    newMonth -= 12;
-                                    newYear += 1;
-                                  }
-
-                                  final targetMonthLength = Jalali(
-                                    newYear,
-                                    newMonth,
-                                  ).monthLength;
-
-                                  final isEndOfMonth = d.monthLength == d.day;
-
-                                  final int newDay = isEndOfMonth
-                                      ? targetMonthLength
-                                      : (d.day <= targetMonthLength
-                                            ? d.day
-                                            : targetMonthLength);
-
-                                  endDate = Jalali(newYear, newMonth, newDay);
-                                  endDateController.text = endDate!
-                                      .formatCompactDate();
-                                }
+                                endDate = endDateCalculator(registerDate!, 6);
+                                endDateController.text = endDate!
+                                    .formatCompactDate();
                               },
                             ),
                             Text(

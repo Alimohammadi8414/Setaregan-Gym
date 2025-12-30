@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -10,10 +9,7 @@ import 'package:setareggan/services/user.dart';
 import 'package:setareggan/theme.dart';
 
 class UsersScreen extends StatefulWidget {
-  const UsersScreen({
-    super.key,
-    required this.isActiveUsers,
-  });
+  const UsersScreen({super.key, required this.isActiveUsers});
 
   final bool isActiveUsers;
 
@@ -32,8 +28,11 @@ class _UsersScreenState extends State<UsersScreen> {
       int endDateMonth = int.parse(element.enddate!.split('/')[1]);
       int endDateDay = int.parse(element.enddate!.split('/')[2]);
 
-      var jalaliDate2 =
-          Jalali(endDateYear, endDateMonth, endDateDay).toDateTime();
+      var jalaliDate2 = Jalali(
+        endDateYear,
+        endDateMonth,
+        endDateDay,
+      ).toDateTime();
 
       if (widget.isActiveUsers) {
         if (jalaliDate2.isAfter(jalaliDate1)) {
@@ -73,10 +72,7 @@ class _UsersScreenState extends State<UsersScreen> {
                   ),
                 );
               },
-              child: const Icon(
-                Icons.add,
-                color: CustomColors.kWhiteColor,
-              ),
+              child: const Icon(Icons.add, color: CustomColors.kWhiteColor),
             )
           : null,
       body: SafeArea(
@@ -93,20 +89,18 @@ class _UsersScreenState extends State<UsersScreen> {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
-                  
+
                   IconButton(
                     onPressed: () async {
                       isThemeDark.value = !isThemeDark.value;
                       await sharedPreferences.setBool(
-                          'isDark', isThemeDark.value);
+                        'isDark',
+                        isThemeDark.value,
+                      );
                     },
                     icon: isThemeDark.value
-                        ? SvgPicture.asset(
-                            'assets/icons/dark.svg',
-                          )
-                        : SvgPicture.asset(
-                            'assets/icons/light.svg',
-                          ),
+                        ? SvgPicture.asset('assets/icons/dark.svg')
+                        : SvgPicture.asset('assets/icons/light.svg'),
                   ),
                   IconButton(
                     onPressed: () async {
@@ -174,7 +168,7 @@ class _UsersScreenState extends State<UsersScreen> {
                       valueListenable: UserService.usersList,
                       builder: (context, value, child) {
                         return Text(
-                         'نفر ${getUsers().length.toString()}',
+                          '${getUsers().length.toString()} نفر',
                           style: const TextStyle(
                             fontSize: 14.0,
                             color: CustomColors.kWhiteColor,
@@ -182,125 +176,119 @@ class _UsersScreenState extends State<UsersScreen> {
                           ),
                         );
                       },
-                    )
+                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 16.0),
               Expanded(
-                  child: ValueListenableBuilder(
-                valueListenable: UserService.usersList,
-                builder: (context, value, child) {
-                  return ListView.builder(
-                    padding: const EdgeInsets.only(bottom: 100),
-                    itemCount: getUsers().length,
-                    itemBuilder: (context, index) {
-                      var user = getUsers()[index];
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12.0),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 18.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(7.0),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(user.fullname!),
-                            ),
-                            Expanded(
-                              child: Text(user.enddate!),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
+                child: ValueListenableBuilder(
+                  valueListenable: UserService.usersList,
+                  builder: (context, value, child) {
+                    return ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 100),
+                      itemCount: getUsers().length,
+                      itemBuilder: (context, index) {
+                        var user = getUsers()[index];
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12.0),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 18.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            borderRadius: BorderRadius.circular(7.0),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(user.fullname!)),
+                              Expanded(child: Text(user.enddate!)),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return AddEditScreen(user: user);
+                                      },
+                                    ),
+                                  );
+                                },
+                                behavior: HitTestBehavior.opaque,
+                                child: SizedBox(
+                                  width: 20.0,
+                                  height: 20.0,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/edit.svg',
+                                    colorFilter: ColorFilter.mode(
+                                      Theme.of(context).colorScheme.onSecondary,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12.0),
+                              GestureDetector(
+                                onTap: () async {
+                                  showDialog(
+                                    context: context,
                                     builder: (context) {
-                                      return AddEditScreen(user: user);
+                                      return AlertDialog(
+                                        title: Text(
+                                          "حذف کاربر",
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
+                                        content: Text(
+                                          "آیا از حذف این کاربر اطمینان دارید؟",
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                              await UserService.deleteUser(
+                                                user.id!,
+                                              );
+                                            },
+                                            child: Text("بله"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("خیر"),
+                                          ),
+                                        ],
+                                      );
                                     },
-                                  ),
-                                );
-                              },
-                              behavior: HitTestBehavior.opaque,
-                              child: SizedBox(
-                                width: 20.0,
-                                height: 20.0,
-                                child: SvgPicture.asset(
-                                  'assets/icons/edit.svg',
-                                  colorFilter: ColorFilter.mode(
-                                    Theme.of(context).colorScheme.onSecondary,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12.0),
-                            GestureDetector(
-                              onTap: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        "حذف کاربر",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      ),
-                                      content: Text(
-                                        "آیا از حذف این کاربر اطمینان دارید؟",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () async {
-                                            Navigator.pop(context);
-                                            await UserService.deleteUser(
-                                                user.id!);
-                                          },
-                                          child: Text(
-                                            "بله",
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            "خیر",
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              behavior: HitTestBehavior.opaque,
-                              child: SizedBox(
-                                width: 20.0,
-                                height: 20.0,
-                                child: SvgPicture.asset(
-                                  'assets/icons/delete.svg',
-                                  colorFilter: ColorFilter.mode(
-                                    Theme.of(context).colorScheme.onSecondary,
-                                    BlendMode.srcIn,
+                                  );
+                                },
+                                behavior: HitTestBehavior.opaque,
+                                child: SizedBox(
+                                  width: 20.0,
+                                  height: 20.0,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/delete.svg',
+                                    colorFilter: ColorFilter.mode(
+                                      Theme.of(context).colorScheme.onSecondary,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-              )),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
